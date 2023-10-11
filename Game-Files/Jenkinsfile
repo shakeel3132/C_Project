@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the C code from your version control system (e.g., Git)
+                checkout scm
+            }
+        }
+
+        stage('Build C Code') {
+            steps {
+                // Set up your build environment (e.g., install build tools)
+                sh 'apt-get update'
+                sh 'apt-get install -y build-essential'  // Install build tools
+
+                // Compile the C code using GCC
+                sh 'gcc -o myapp Matchstick-Game.c'  // Replace 'myapp.c' with your C source file
+            }
+        }
+
+        stage('Archive Binary') {
+            steps {
+                // Archive the binary file for later use
+                archiveArtifacts artifacts: 'myapp', allowEmptyArchive: true
+            }
+        }
+    }
+
+   // post {
+    //    success {
+            // You can add post-build actions here, such as deployment or testing
+     //   }
+ //   }
+}
